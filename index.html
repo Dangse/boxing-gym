@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -33,21 +34,9 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 
-    <!-- Chosen Palette: Warm Neutrals & Amber. 
-         Application Structure Plan:
-         1. AI Assistant Center (New Copy/Fold buttons, No special characters)
-         2. Registration Analysis (Academy vs Sports Facility)
-         3. Tax Office Initial Duties (Registration, Account, Receipts)
-         4. Interior VAT Assetization Analysis
-         5. Annual Tax Timeline (Withholding, Status, Income Tax)
-         6. Income Tax Calculation Waterfall
-         7. Special Tax Credits (Youth Startup, SME Credits)
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-</head>
+    </head>
 <body class="text-brand-800 antialiased min-h-screen flex flex-col md:flex-row">
 
-    <!-- Sidebar Navigation -->
     <nav id="sidebar" class="hidden md:flex flex-col w-full md:w-72 bg-white border-r border-brand-200 h-screen sticky top-0 overflow-y-auto z-40 fixed md:relative">
         <div class="p-8 border-b border-brand-100">
             <h1 class="text-2xl font-black text-brand-900 leading-tight">Boxing Gym<br><span class="text-accent">Tax Master</span></h1>
@@ -55,6 +44,7 @@
         </div>
         <ul class="flex-1 py-6 space-y-1">
             <li><a href="#section-ai" class="block px-8 py-3 bg-brand-50 text-accent font-bold border-l-4 border-accent">✨ AI 계약서 도우미</a></li>
+            <li><a href="payroll.html" class="block px-8 py-3 hover:bg-brand-50 border-l-4 border-transparent hover:border-accent transition-all">💸 급여관리</a></li>
             <li><a href="#section-reg" class="block px-8 py-3 hover:bg-brand-50 border-l-4 border-transparent hover:border-accent transition-all">🏢 설립 및 등록 차이</a></li>
             <li><a href="#section-duty" class="block px-8 py-3 hover:bg-brand-50 border-l-4 border-transparent hover:border-accent transition-all">⚖️ 세무서 초기 의무</a></li>
             <li><a href="#section-interior" class="block px-8 py-3 hover:bg-brand-50 border-l-4 border-transparent hover:border-accent transition-all">🔨 인테리어와 매입세액</a></li>
@@ -67,10 +57,8 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="flex-1 p-4 md:p-12 overflow-y-auto w-full max-w-6xl mx-auto space-y-24">
 
-        <!-- 1. AI Contract Center -->
         <section id="section-ai" class="scroll-mt-12 space-y-8">
             <div class="text-center md:text-left">
                 <h2 class="text-3xl font-black text-brand-900 mb-2">✨ AI 계약서 작성 도우미</h2>
@@ -78,7 +66,6 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Freelancer Assistant -->
                 <div class="ai-card p-8 shadow-sm">
                     <h3 class="text-xl font-bold text-brand-900 mb-6 flex items-center">
                         <span class="bg-accent text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">01</span>
@@ -97,7 +84,6 @@
                     </div>
                 </div>
 
-                <!-- Labor Assistant -->
                 <div class="ai-card p-8 shadow-sm">
                     <h3 class="text-xl font-bold text-brand-900 mb-6 flex items-center">
                         <span class="bg-brand-900 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">02</span>
@@ -119,7 +105,6 @@
             <div id="loading" class="hidden text-center text-accent animate-pulse font-bold">AI가 문서를 작성하고 있습니다. 잠시만 기다려 주세요...</div>
         </section>
 
-        <!-- 2. Registration Analysis (Seongnam Specific) -->
         <section id="section-reg" class="scroll-mt-12 space-y-8">
             <h3 class="text-2xl font-black text-brand-900 border-l-4 border-accent pl-6">🏢 학원 설립등록 vs 체육시설업 신고</h3>
             <div class="bg-white rounded-3xl border border-brand-200 overflow-hidden shadow-sm">
@@ -162,7 +147,6 @@
             </div>
         </section>
 
-        <!-- 3. Tax Office Duties -->
         <section id="section-duty" class="scroll-mt-12 space-y-8">
             <h3 class="text-2xl font-black text-brand-900 border-l-4 border-accent pl-6">⚖️ 세무서 초기 의무 사항 및 규정</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -202,7 +186,6 @@
             </div>
         </section>
 
-        <!-- 4. Interior VAT Assetization -->
         <section id="section-interior" class="scroll-mt-12 space-y-8">
             <h3 class="text-2xl font-black text-brand-900 border-l-4 border-accent pl-6">🔨 인테리어 매입세액불공제 처리</h3>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -231,29 +214,24 @@
             </div>
         </section>
 
-        <!-- 5. Annual Tax Timeline -->
         <section id="section-calendar" class="scroll-mt-12 space-y-8">
             <h3 class="text-2xl font-black text-brand-900 border-l-4 border-accent pl-6">📅 연간 주요 세무 일정</h3>
             <div class="flex space-x-6 overflow-x-auto no-scrollbar pb-6 px-2">
-                <!-- Jan/Feb -->
                 <div class="min-w-[280px] bg-white p-6 rounded-2xl border border-brand-200 shadow-sm relative pt-12">
                     <div class="absolute top-0 left-6 -translate-y-1/2 bg-accent text-white px-4 py-2 rounded-xl text-xs font-black">2월 10일</div>
                     <h4 class="font-bold text-brand-800 mb-2">사업자 현황신고</h4>
                     <p class="text-xs text-brand-500 leading-relaxed">지난 1년 매출액을 세무서에 보고합니다. 종합소득세의 기초 자료가 됩니다.</p>
                 </div>
-                <!-- Monthly -->
                 <div class="min-w-[280px] bg-white p-6 rounded-2xl border border-brand-200 shadow-sm relative pt-12">
                     <div class="absolute top-0 left-6 -translate-y-1/2 bg-brand-800 text-white px-4 py-2 rounded-xl text-xs font-black">매달 10일</div>
                     <h4 class="font-bold text-brand-800 mb-2">원천세 신고·납부</h4>
                     <p class="text-xs text-brand-500 leading-relaxed">코치(3.3%)나 직원의 월급에서 뗀 세금을 나라에 내는 날입니다.</p>
                 </div>
-                <!-- Mar -->
                 <div class="min-w-[280px] bg-white p-6 rounded-2xl border border-brand-200 shadow-sm relative pt-12">
                     <div class="absolute top-0 left-6 -translate-y-1/2 bg-accent text-white px-4 py-2 rounded-xl text-xs font-black">3월 10일</div>
                     <h4 class="font-bold text-brand-800 mb-2">지급명세서 제출</h4>
                     <p class="text-xs text-brand-500 leading-relaxed">누구에게 얼마를 지급했는지 상세 내역을 제출하는 마감일입니다.</p>
                 </div>
-                <!-- May -->
                 <div class="min-w-[280px] bg-white p-6 rounded-2xl border border-brand-200 shadow-sm relative pt-12">
                     <div class="absolute top-0 left-6 -translate-y-1/2 bg-accent text-white px-4 py-2 rounded-xl text-xs font-black">5월 한 달</div>
                     <h4 class="font-bold text-brand-800 mb-2">종합소득세 신고</h4>
@@ -262,7 +240,6 @@
             </div>
         </section>
 
-        <!-- 6. Income Tax Calculation Waterfall -->
         <section id="section-structure" class="scroll-mt-12 space-y-8">
             <h3 class="text-2xl font-black text-brand-900 border-l-4 border-accent pl-6">💰 종합소득세 계산 구조</h3>
             <div class="bg-brand-900 text-white p-10 rounded-3xl shadow-xl">
@@ -308,7 +285,6 @@
             </div>
         </section>
 
-        <!-- 7. Special Tax Credits -->
         <section id="section-benefit" class="scroll-mt-12 space-y-8">
             <h3 class="text-2xl font-black text-brand-900 border-l-4 border-accent pl-6">🎁 세액공제 및 감면 혜택</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -333,14 +309,12 @@
             </div>
         </section>
 
-        <!-- Footer -->
         <footer class="pt-12 border-t border-brand-100 text-center text-brand-400 text-[10px] pb-12">
             <p>© 2026 Boxing Gym Founders Master Guide. Clean Document Logic Active.</p>
         </footer>
 
     </main>
 
-    <!-- UI Logic -->
     <script>
         const apiKey = ""; 
         const model = "gemini-2.5-flash-preview-09-2025";
@@ -486,3 +460,5 @@
     </script>
 </body>
 </html>
+
+```
