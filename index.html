@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>권투체육관 AI 창업 및 세무 가이드</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>권투체육관 AI 세무 마스터 (반응형 통합본)</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -25,187 +24,273 @@
     </script>
 
     <style>
-        .chart-container { position: relative; width: 100%; max-width: 100%; margin: 0 auto; height: 300px; }
-        html { scroll-behavior: smooth; }
-        body { background-color: #fbfaf9; color: #444; }
-        .ai-card { background: white; border: 1px solid #ebe6e0; border-radius: 1.5rem; transition: all 0.3s ease; }
-        .ai-card:hover { border-color: #d97706; box-shadow: 0 10px 30px -10px rgba(217, 119, 6, 0.1); }
-        .contract-output { white-space: pre-wrap; word-break: break-all; font-family: 'Noto Sans KR', sans-serif; line-height: 1.8; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: none; }
+        body { background-color: #fbfaf9; color: #333; word-break: keep-all; }
+        
+        /* Mobile Specifics */
+        input, select, button { font-size: 16px !important; }
+        .mobile-touch-target { min-height: 48px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-    </style>
+        
+        /* Desktop Specifics */
+        @media (min-width: 768px) {
+            .desktop-card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        }
 
-    </head>
+        .ai-card { background: white; border: 1px solid #ebe6e0; border-radius: 1.5rem; transition: all 0.3s ease; }
+        .contract-output { white-space: pre-wrap; word-break: break-all; font-size: 0.95rem; line-height: 1.8; color: #1a1a1a; }
+        .chart-container { position: relative; width: 100%; height: 260px; }
+        
+        @keyframes bounce-x {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(5px); }
+        }
+        .animate-bounce-x { animation: bounce-x 1s infinite; }
+    </style>
+    <!-- 
+      Responsive Strategy:
+      - Mobile: Hidden Sidebar, Sticky Top Header, Drawer Menu, Single Column Layout.
+      - Desktop: Fixed Left Sidebar, Hidden Mobile Header, 2/3 Column Grid Layout.
+      - Content: Identical across both views.
+    -->
+</head>
 <body class="text-brand-800 antialiased min-h-screen flex flex-col md:flex-row">
 
-    <nav id="sidebar" class="hidden md:flex flex-col w-full md:w-72 bg-white border-r border-brand-200 h-screen sticky top-0 overflow-y-auto z-40 fixed md:relative">
-        <div class="p-8 border-b border-brand-100">
-            <h1 class="text-2xl font-black text-brand-900 leading-tight">Boxing Gym<br><span class="text-accent">Tax Master</span></h1>
-            <p class="text-[10px] text-brand-400 mt-2 font-bold uppercase tracking-widest">Seongnam Founders v3</p>
+    <!-- ================= MOBILE HEADER (Visible only on mobile) ================= -->
+    <header class="md:hidden sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-brand-200 px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+            <span class="text-xl">🥊</span>
+            <h1 class="text-lg font-black text-brand-900 tracking-tight">AI 세무 마스터</h1>
         </div>
-        <ul class="flex-1 py-6 space-y-1">
-            <li><a href="#section-ai" class="block px-8 py-3 bg-brand-50 text-accent font-bold border-l-4 border-accent">✨ AI 계약서 도우미</a></li>
-            <li><a href="payroll.html" class="block px-8 py-3 hover:bg-brand-50 border-l-4 border-transparent hover:border-accent transition-all">💸 급여관리</a></li>
-            <li><a href="#section-reg" class="block px-8 py-3 hover:bg-brand-50 border-l-4 border-transparent hover:border-accent transition-all">🏢 설립 및 등록 차이</a></li>
-            <li><a href="#section-duty" class="block px-8 py-3 hover:bg-brand-50 border-l-4 border-transparent hover:border-accent transition-all">⚖️ 세무서 초기 의무</a></li>
-            <li><a href="#section-interior" class="block px-8 py-3 hover:bg-brand-50 border-l-4 border-transparent hover:border-accent transition-all">🔨 인테리어와 매입세액</a></li>
-            <li><a href="#section-calendar" class="block px-8 py-3 hover:bg-brand-50 border-l-4 border-transparent hover:border-accent transition-all">📅 연간 세무 일정</a></li>
-            <li><a href="#section-structure" class="block px-8 py-3 hover:bg-brand-50 border-l-4 border-transparent hover:border-accent transition-all">💰 소득세 계산 구조</a></li>
-            <li><a href="#section-benefit" class="block px-8 py-3 hover:bg-brand-50 border-l-4 border-transparent hover:border-accent transition-all">🎁 세액감면 및 혜택</a></li>
-        </ul>
-        <div class="p-8 text-[10px] text-brand-400 border-t border-brand-100">
-            <p>※ 성남시 수정/중원/분당 특화 가이드</p>
+        <button id="menu-toggle" class="p-2 text-brand-700 bg-brand-50 rounded-lg flex items-center space-x-1 mobile-touch-target">
+            <span class="text-sm font-bold">메뉴</span>
+            <span class="text-xs">☰</span>
+        </button>
+    </header>
+
+    <!-- ================= MOBILE DRAWER MENU (Hidden by default) ================= -->
+    <nav id="mobile-menu" class="fixed inset-0 z-[60] bg-black/50 hidden opacity-0 transition-opacity duration-300 md:hidden">
+        <div class="absolute right-0 top-0 bottom-0 w-3/4 bg-white p-6 shadow-2xl flex flex-col overflow-y-auto">
+            <div class="flex justify-between items-center mb-8">
+                <span class="font-black text-brand-900 text-lg">내비게이션</span>
+                <button id="menu-close" class="text-3xl text-brand-400 mobile-touch-target px-2">&times;</button>
+            </div>
+            <ul class="flex-1 space-y-2 font-bold text-brand-700">
+                <!-- Payroll Link -->
+                <li>
+                    <a href="payroll.html" class="flex items-center justify-between p-4 bg-accent text-white rounded-xl shadow-lg mb-6 active:scale-95 transition-all">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-xl">💰</span>
+                            <span>급여관리 바로가기</span>
+                        </div>
+                        <span class="text-xs">이동 ➔</span>
+                    </a>
+                </li>
+                <li><a href="#section-ai" class="block py-4 border-b border-brand-50">✨ AI 계약서 도우미</a></li>
+                <li><a href="#section-reg" class="block py-4 border-b border-brand-50">🏢 설립 및 등록 차이</a></li>
+                <li><a href="#section-duty" class="block py-4 border-b border-brand-50">⚖️ 세무서 초기 의무</a></li>
+                <li><a href="#section-interior" class="block py-4 border-b border-brand-50">🔨 인테리어 부가세</a></li>
+                <li><a href="#section-calendar" class="block py-4 border-b border-brand-50">📅 연간 세무 일정</a></li>
+                <li><a href="#section-structure" class="block py-4 border-b border-brand-50">💰 소득세 계산 구조</a></li>
+                <li><a href="#section-benefit" class="block py-4 border-b border-brand-50">🎁 세액감면 혜택</a></li>
+            </ul>
         </div>
     </nav>
 
-    <main class="flex-1 p-4 md:p-12 overflow-y-auto w-full max-w-6xl mx-auto space-y-24">
+    <!-- ================= DESKTOP SIDEBAR (Hidden on mobile) ================= -->
+    <nav class="hidden md:flex flex-col w-72 bg-white border-r border-brand-200 h-screen sticky top-0 overflow-y-auto z-40">
+        <div class="p-8 border-b border-brand-100">
+            <h1 class="text-2xl font-black text-brand-900 leading-tight">Boxing Gym<br><span class="text-accent">Tax Master</span></h1>
+            <p class="text-[10px] text-brand-400 mt-2 font-bold uppercase tracking-widest">Seongnam Edition</p>
+        </div>
+        <ul class="flex-1 py-6 space-y-1">
+            <li class="px-6 mb-6">
+                <a href="payroll.html" class="flex items-center justify-between p-3 bg-accent text-white rounded-xl shadow-md hover:bg-accent-dark transition-all group">
+                    <div class="flex items-center space-x-2">
+                        <span>💰</span>
+                        <span class="font-bold text-sm">급여관리 시스템</span>
+                    </div>
+                    <span class="text-xs group-hover:translate-x-1 transition-transform">➔</span>
+                </a>
+            </li>
+            <li><a href="#section-ai" class="block px-8 py-3 text-brand-700 hover:bg-brand-50 hover:text-accent font-bold border-l-4 border-transparent hover:border-accent transition-all">✨ AI 계약서 도우미</a></li>
+            <li><a href="#section-reg" class="block px-8 py-3 text-brand-600 hover:bg-brand-50 hover:text-accent font-medium border-l-4 border-transparent hover:border-accent transition-all">🏢 설립 및 등록 차이</a></li>
+            <li><a href="#section-duty" class="block px-8 py-3 text-brand-600 hover:bg-brand-50 hover:text-accent font-medium border-l-4 border-transparent hover:border-accent transition-all">⚖️ 세무서 초기 의무</a></li>
+            <li><a href="#section-interior" class="block px-8 py-3 text-brand-600 hover:bg-brand-50 hover:text-accent font-medium border-l-4 border-transparent hover:border-accent transition-all">🔨 인테리어 부가세</a></li>
+            <li><a href="#section-calendar" class="block px-8 py-3 text-brand-600 hover:bg-brand-50 hover:text-accent font-medium border-l-4 border-transparent hover:border-accent transition-all">📅 연간 세무 일정</a></li>
+            <li><a href="#section-structure" class="block px-8 py-3 text-brand-600 hover:bg-brand-50 hover:text-accent font-medium border-l-4 border-transparent hover:border-accent transition-all">💰 소득세 계산 구조</a></li>
+            <li><a href="#section-benefit" class="block px-8 py-3 text-brand-600 hover:bg-brand-50 hover:text-accent font-medium border-l-4 border-transparent hover:border-accent transition-all">🎁 세액감면 혜택</a></li>
+        </ul>
+        <div class="p-8 text-[10px] text-brand-400 border-t border-brand-50">
+            <p>※ 데스크탑 최적화 모드</p>
+        </div>
+    </nav>
 
-        <section id="section-ai" class="scroll-mt-12 space-y-8">
-            <div class="text-center md:text-left">
-                <h2 class="text-3xl font-black text-brand-900 mb-2">✨ AI 계약서 작성 도우미</h2>
-                <p class="text-brand-600">마크다운 기호 없이 복사하여 바로 사용 가능한 깔끔한 계약 문구를 생성합니다.</p>
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="flex-1 p-4 md:p-12 overflow-y-auto w-full max-w-7xl mx-auto space-y-12 md:space-y-24">
+
+        <!-- Hero Section -->
+        <section class="py-4 md:py-0 text-center md:text-left">
+            <h2 class="text-2xl md:text-4xl font-black text-brand-900 leading-tight">성남시 권투체육관<br><span class="text-accent underline decoration-accent/20 underline-offset-4">창업 및 세무 마스터</span></h2>
+            <p class="text-sm md:text-base text-brand-500 mt-3 md:mt-4 leading-relaxed max-w-2xl">
+                성남시 수정/중원/분당구 지역 특성을 반영한 세무 가이드입니다.<br class="md:hidden"> AI를 활용해 계약서 작성부터 절세 전략까지 한 번에 해결하세요.
+            </p>
+        </section>
+
+        <!-- Payroll Quick Link (Visible on Mobile & Desktop) -->
+        <!-- On desktop, it acts as a highlighted dashboard card -->
+        <section id="section-quick-payroll" class="px-2 md:px-0">
+            <a href="payroll.html" class="group flex flex-col md:flex-row items-center md:justify-between p-6 md:p-8 bg-white border-2 border-accent rounded-[2rem] shadow-xl shadow-accent/5 hover:shadow-accent/10 transition-all desktop-card-hover cursor-pointer">
+                <div class="flex flex-col md:flex-row items-center md:space-x-6 text-center md:text-left">
+                    <div class="bg-accent/10 p-4 rounded-full mb-3 md:mb-0 group-hover:bg-accent/20 transition-colors">
+                        <span class="text-3xl md:text-4xl">💰</span>
+                    </div>
+                    <div>
+                        <h3 class="text-lg md:text-2xl font-black text-brand-900">급여관리 시스템 바로가기</h3>
+                        <p class="text-[11px] md:text-sm text-brand-500 mt-1">코치 및 직원의 급여 계산, 명세서 발급을 간편하게 처리하세요.</p>
+                    </div>
+                </div>
+                <div class="mt-4 md:mt-0 flex items-center text-accent font-bold text-xs md:text-base bg-accent/5 px-4 py-2 rounded-full group-hover:bg-accent group-hover:text-white transition-all">
+                    <span>이동하기</span>
+                    <span class="ml-2 animate-bounce-x">➔</span>
+                </div>
+            </a>
+        </section>
+
+        <!-- 1. AI Contract Center -->
+        <section id="section-ai" class="scroll-mt-20 space-y-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl md:text-2xl font-bold text-brand-900 flex items-center">
+                    <span class="text-accent mr-2">✨</span> AI 계약서 도우미
+                </h3>
+                <span class="bg-brand-100 text-brand-600 px-3 py-1 rounded-full text-[10px] md:text-xs font-bold tracking-tight">CLEAN TEXT MODE</span>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="ai-card p-8 shadow-sm">
-                    <h3 class="text-xl font-bold text-brand-900 mb-6 flex items-center">
-                        <span class="bg-accent text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">01</span>
-                        프리랜서 계약서 작성 도우미
-                    </h3>
-                    <div class="space-y-4">
-                        <input type="text" id="freeRole" placeholder="코치 이름 및 역할 (예: 홍길동 저녁타임 지도)" class="w-full p-4 bg-brand-50 border border-brand-200 rounded-2xl outline-none focus:border-accent">
-                        <button id="btnFreeGen" class="w-full bg-accent text-white font-black py-4 rounded-2xl shadow-lg hover:bg-accent-dark transition-all">계약 문구 생성하기</button>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+                <!-- Freelancer -->
+                <div class="ai-card p-6 shadow-sm space-y-4 border-l-4 border-l-accent desktop-card-hover">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-brand-800 text-lg">프리랜서 위촉계약서</h4>
+                        <span class="text-2xl">🤝</span>
                     </div>
-                    <div id="freeResultArea" class="hidden mt-6 space-y-4">
-                        <div id="freeOutput" class="p-6 bg-stone-50 border border-brand-200 rounded-2xl text-sm contract-output"></div>
+                    <p class="text-xs text-brand-400">코치와의 독립적인 파트너십 계약 (3.3% 원천징수)</p>
+                    <input type="text" id="freeRole" placeholder="코치 이름 및 주요 역할 입력" class="w-full px-4 py-3 bg-brand-50 border border-brand-200 rounded-xl outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all mobile-touch-target">
+                    <button id="btnFreeGen" class="w-full bg-accent text-white font-black py-4 rounded-xl shadow-md hover:bg-accent-dark active:scale-95 transition-all mobile-touch-target">AI 문구 생성</button>
+                    
+                    <div id="freeResultArea" class="hidden space-y-3 pt-4 border-t border-brand-100">
+                        <div id="freeOutput" class="p-4 bg-stone-50 border border-brand-200 rounded-xl contract-output text-sm"></div>
                         <div class="flex gap-2">
-                            <button onclick="copyToClipboard('freeOutput')" class="flex-1 bg-brand-800 text-white py-3 rounded-xl text-sm font-bold hover:bg-black transition-colors">복사하기</button>
-                            <button onclick="foldArea('freeResultArea')" class="flex-1 bg-brand-200 text-brand-700 py-3 rounded-xl text-sm font-bold hover:bg-brand-300 transition-colors">결과 접기</button>
+                            <button onclick="copyToClipboard('freeOutput')" class="flex-1 bg-brand-800 hover:bg-brand-900 text-white py-3 rounded-xl text-sm font-bold shadow-sm transition-colors mobile-touch-target">복사하기</button>
+                            <button onclick="foldArea('freeResultArea')" class="flex-1 bg-brand-200 hover:bg-brand-300 text-brand-700 py-3 rounded-xl text-sm font-bold transition-colors mobile-touch-target">접기</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="ai-card p-8 shadow-sm">
-                    <h3 class="text-xl font-bold text-brand-900 mb-6 flex items-center">
-                        <span class="bg-brand-900 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 text-sm">02</span>
-                        근로계약서 작성 도우미
-                    </h3>
-                    <div class="space-y-4">
-                        <input type="text" id="laborInfo" placeholder="직원 이름 및 조건 (예: 김철수 월 200만 주5일)" class="w-full p-4 bg-brand-50 border border-brand-200 rounded-2xl outline-none focus:border-brand-900">
-                        <button id="btnLaborGen" class="w-full bg-brand-900 text-white font-black py-4 rounded-2xl shadow-lg hover:bg-black transition-all">근로계약 초안 생성</button>
+                <!-- Labor -->
+                <div class="ai-card p-6 shadow-sm space-y-4 border-l-4 border-l-brand-800 desktop-card-hover">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-brand-800 text-lg">표준 근로계약서</h4>
+                        <span class="text-2xl">📄</span>
                     </div>
-                    <div id="laborResultArea" class="hidden mt-6 space-y-4">
-                        <div id="laborOutput" class="p-6 bg-stone-50 border border-brand-200 rounded-2xl text-sm contract-output"></div>
+                    <p class="text-xs text-brand-400">정규직/아르바이트 직원 채용 (4대보험 적용)</p>
+                    <input type="text" id="laborInfo" placeholder="근로자 정보 및 급여 조건 입력" class="w-full px-4 py-3 bg-brand-50 border border-brand-200 rounded-xl outline-none focus:border-brand-900 focus:ring-2 focus:ring-brand-900/20 transition-all mobile-touch-target">
+                    <button id="btnLaborGen" class="w-full bg-brand-900 text-white font-black py-4 rounded-xl shadow-md hover:bg-black active:scale-95 transition-all mobile-touch-target">AI 초안 생성</button>
+                    
+                    <div id="laborResultArea" class="hidden space-y-3 pt-4 border-t border-brand-100">
+                        <div id="laborOutput" class="p-4 bg-stone-50 border border-brand-200 rounded-xl contract-output text-sm"></div>
                         <div class="flex gap-2">
-                            <button onclick="copyToClipboard('laborOutput')" class="flex-1 bg-brand-800 text-white py-3 rounded-xl text-sm font-bold hover:bg-black transition-colors">복사하기</button>
-                            <button onclick="foldArea('laborResultArea')" class="flex-1 bg-brand-200 text-brand-700 py-3 rounded-xl text-sm font-bold hover:bg-brand-300 transition-colors">결과 접기</button>
+                            <button onclick="copyToClipboard('laborOutput')" class="flex-1 bg-brand-800 hover:bg-brand-900 text-white py-3 rounded-xl text-sm font-bold shadow-sm transition-colors mobile-touch-target">복사하기</button>
+                            <button onclick="foldArea('laborResultArea')" class="flex-1 bg-brand-200 hover:bg-brand-300 text-brand-700 py-3 rounded-xl text-sm font-bold transition-colors mobile-touch-target">접기</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div id="loading" class="hidden text-center text-accent animate-pulse font-bold">AI가 문서를 작성하고 있습니다. 잠시만 기다려 주세요...</div>
-        </section>
-
-        <section id="section-reg" class="scroll-mt-12 space-y-8">
-            <h3 class="text-2xl font-black text-brand-900 border-l-4 border-accent pl-6">🏢 학원 설립등록 vs 체육시설업 신고</h3>
-            <div class="bg-white rounded-3xl border border-brand-200 overflow-hidden shadow-sm">
-                <table class="w-full text-left text-sm border-collapse">
-                    <thead class="bg-brand-50">
-                        <tr>
-                            <th class="p-6 font-bold text-brand-900 border-b border-brand-100">비교 항목</th>
-                            <th class="p-6 font-bold text-brand-900 border-b border-brand-100">학원 설립 등록 (교육청)</th>
-                            <th class="p-6 font-bold text-brand-900 border-b border-brand-100">체육시설업 신고 (구청)</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-brand-100">
-                        <tr>
-                            <td class="p-6 font-bold bg-brand-50/30">관할 기관</td>
-                            <td class="p-6">성남교육지원청 (분당구 야탑역 인근)</td>
-                            <td class="p-6">성남시 수정구, 중원구, 분당구청 문화체육과</td>
-                        </tr>
-                        <tr>
-                            <td class="p-6 font-bold bg-brand-50/30">시설 기준</td>
-                            <td class="p-6">강의실 전용 면적 등 교육청 고시 기준 엄수</td>
-                            <td class="p-6">운동시설 면적 및 안전 기준 (샌드백, 링 등)</td>
-                        </tr>
-                        <tr>
-                            <td class="p-6 font-bold bg-brand-50/30">자격 요건</td>
-                            <td class="p-6">학원장 및 강사 자격 증빙</td>
-                            <td class="p-6">생활체육지도자 자격증 소지자 배치 의무</td>
-                        </tr>
-                        <tr>
-                            <td class="p-6 font-bold bg-brand-50/30">면세 여부</td>
-                            <td class="p-6">교육 용역으로 당연 면세 대상</td>
-                            <td class="p-6">교육 기능 제공 시 부가가치세 면세 가능</td>
-                        </tr>
-                        <tr>
-                            <td class="p-6 font-bold bg-brand-50/30">특이 사항</td>
-                            <td class="p-6">교습비 신고 및 관리 엄격</td>
-                            <td class="p-6">성남시 조례에 따른 체육도장업 관리</td>
-                        </tr>
-                    </tbody>
-                </table>
+            
+            <div id="loading" class="hidden text-center py-8">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-4 border-accent"></div>
+                <p class="text-sm text-brand-500 mt-3 font-bold tracking-tight">AI가 최적의 계약 문구를 생성 중입니다...</p>
             </div>
         </section>
 
-        <section id="section-duty" class="scroll-mt-12 space-y-8">
-            <h3 class="text-2xl font-black text-brand-900 border-l-4 border-accent pl-6">⚖️ 세무서 초기 의무 사항 및 규정</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white p-8 rounded-3xl border border-brand-200">
-                    <div class="flex items-center mb-4">
-                        <span class="text-2xl mr-3">📝</span>
-                        <h4 class="font-bold text-brand-900 uppercase text-xs tracking-widest text-brand-400">Step 01</h4>
-                    </div>
-                    <p class="font-bold text-brand-900 mb-2">사업자등록 신청 (면세)</p>
-                    <p class="text-sm text-brand-600 leading-relaxed">
-                        개시일부터 20일 이내에 신청해야 합니다. 권투체육관은 부가가치세법상 교육용역 제공으로 <strong>면세사업자</strong> 신청이 가능합니다.
-                    </p>
-                </div>
-                <div class="bg-white p-8 rounded-3xl border border-brand-200">
-                    <div class="flex items-center mb-4">
-                        <span class="text-2xl mr-3">💳</span>
-                        <h4 class="font-bold text-brand-900 uppercase text-xs tracking-widest text-brand-400">Step 02</h4>
-                    </div>
-                    <p class="font-bold text-brand-900 mb-2">사업용계좌 및 카드 등록</p>
-                    <p class="text-sm text-brand-600 leading-relaxed">
-                        사업 개시일로부터 6개월 이내에 홈택스에 등록해야 합니다. 미등록 시 수입금액의 0.2% 가산세와 세액감면 배제 리스크가 있습니다.
-                    </p>
-                </div>
-                <div class="bg-white p-8 rounded-3xl border border-brand-200 md:col-span-2">
-                    <div class="flex items-center mb-4">
-                        <span class="text-2xl mr-3">💰</span>
-                        <h4 class="font-bold text-brand-900 uppercase text-xs tracking-widest text-brand-400">Rule</h4>
-                    </div>
-                    <p class="font-bold text-brand-900 mb-2">현금영수증 의무발행 및 가산세</p>
-                    <p class="text-sm text-brand-600 leading-relaxed mb-4">
-                        체육관은 현금영수증 의무발행 업종입니다. 건당 <strong>10만원 이상</strong> 현금 거래 시 소비자의 요청이 없더라도 5일 이내에 의무 발행해야 합니다.
-                    </p>
-                    <div class="bg-red-50 p-4 rounded-xl border border-red-100 text-xs text-red-700">
-                        <strong>가산세 규정:</strong> 미발행 시 미발행 금액의 20%가 가산세로 부과되며, 신고자에게는 포상금이 지급되므로 주의가 필요합니다.
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="section-interior" class="scroll-mt-12 space-y-8">
-            <h3 class="text-2xl font-black text-brand-900 border-l-4 border-accent pl-6">🔨 인테리어 매입세액불공제 처리</h3>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="space-y-6">
-                    <div class="bg-white p-8 rounded-3xl border border-brand-200">
-                        <p class="font-bold text-brand-900 mb-4">면세사업자의 부가세 처리 방식</p>
-                        <p class="text-sm text-brand-600 leading-relaxed mb-4">
-                            면세사업자는 매출 부가세를 걷지 않으므로, 인테리어 시 지불한 매입 부가세 10%를 환급받을 수 없습니다. (매입세액불공제)
-                        </p>
-                        <ul class="text-xs text-brand-500 space-y-3">
-                            <li class="flex items-start"><span class="mr-2 text-accent">•</span> <strong>자산 취득원가 산입:</strong> 환급받지 못한 부가세는 인테리어(자산) 가액에 포함합니다.</li>
-                            <li class="flex items-start"><span class="mr-2 text-accent">•</span> <strong>비용화 과정:</strong> 이 총액을 5년에 걸쳐 감가상각비로 종합소득세 필요경비로 반영합니다.</li>
+        <!-- 2. Registration Differences -->
+        <section id="section-reg" class="scroll-mt-20 space-y-6">
+            <h3 class="text-xl md:text-2xl font-bold text-brand-900 flex items-center">
+                <span class="text-accent mr-2">🏢</span> 설립 및 등록 차이
+            </h3>
+            
+            <!-- Mobile: Horizontal Scroll / Desktop: Grid -->
+            <div class="overflow-x-auto md:overflow-visible no-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
+                <div class="flex md:grid md:grid-cols-2 space-x-4 md:space-x-0 md:gap-6 w-[550px] md:w-full">
+                    <div class="w-[260px] md:w-full bg-white p-6 rounded-2xl border border-brand-200 shadow-sm desktop-card-hover">
+                        <p class="font-black text-brand-900 text-lg mb-4 pb-2 border-b border-brand-100">체육시설업 신고</p>
+                        <ul class="text-sm text-brand-600 space-y-3">
+                            <li class="flex items-start"><span class="mr-2 text-accent">✔</span> 관할: 성남시 각 구청 (수정/중원/분당)</li>
+                            <li class="flex items-start"><span class="mr-2 text-accent">✔</span> 기준: 생활체육지도자 배치 필수</li>
+                            <li class="flex items-start"><span class="mr-2 text-accent">✔</span> 특징: 링, 샌드백 등 안전시설 점검</li>
                         </ul>
                     </div>
-                    <div class="bg-brand-50 p-6 rounded-2xl border border-brand-100">
-                        <label class="block text-[10px] font-bold text-brand-400 mb-2 uppercase">공사비 입력 (VAT 별도)</label>
-                        <div class="flex items-end">
-                            <input type="number" id="costInput" value="50000000" class="text-3xl font-black text-accent w-full bg-transparent outline-none">
-                            <span class="font-bold text-brand-400">원</span>
+                    <div class="w-[260px] md:w-full bg-white p-6 rounded-2xl border border-brand-200 shadow-sm desktop-card-hover">
+                        <p class="font-black text-brand-900 text-lg mb-4 pb-2 border-b border-brand-100">학원 설립 등록</p>
+                        <ul class="text-sm text-brand-600 space-y-3">
+                            <li class="flex items-start"><span class="mr-2 text-brand-400">✔</span> 관할: 성남교육지원청</li>
+                            <li class="flex items-start"><span class="mr-2 text-brand-400">✔</span> 기준: 강의실 면적 및 소방 기준 엄격</li>
+                            <li class="flex items-start"><span class="mr-2 text-brand-400">✔</span> 특징: 교습비 게시 및 성범죄 조회</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Tax Office Initial Duties -->
+        <section id="section-duty" class="scroll-mt-20 space-y-6">
+            <h3 class="text-xl md:text-2xl font-bold text-brand-900 flex items-center">
+                <span class="text-accent mr-2">⚖️</span> 세무서 초기 의무
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-brand-200 flex md:flex-col items-center md:items-start justify-between md:justify-start desktop-card-hover">
+                    <div class="flex-1">
+                        <span class="text-2xl mb-2 block">📝</span>
+                        <p class="font-bold text-brand-800 text-sm md:text-base">사업자등록 신청</p>
+                        <p class="text-[11px] md:text-xs text-brand-500 mt-1">개시 20일 내 면세사업자 신청</p>
+                    </div>
+                    <span class="text-[10px] text-accent font-bold bg-accent/10 px-2 py-1 rounded md:mt-4 md:self-start">필수</span>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-brand-200 flex md:flex-col items-center md:items-start justify-between md:justify-start desktop-card-hover">
+                    <div class="flex-1">
+                        <span class="text-2xl mb-2 block">💳</span>
+                        <p class="font-bold text-brand-800 text-sm md:text-base">계좌/카드 등록</p>
+                        <p class="text-[11px] md:text-xs text-brand-500 mt-1">홈택스 등록 시 가산세 면제</p>
+                    </div>
+                    <span class="text-[10px] text-brand-400 font-bold bg-brand-50 px-2 py-1 rounded md:mt-4 md:self-start">6개월 내</span>
+                </div>
+                <div class="bg-red-50 p-6 rounded-2xl border border-red-100 desktop-card-hover">
+                    <span class="text-2xl mb-2 block">🚨</span>
+                    <p class="font-bold text-red-800 text-sm md:text-base">현금영수증 의무 발행</p>
+                    <p class="text-[11px] md:text-xs text-red-600 mt-2 leading-relaxed">
+                        건당 10만원 이상 현금 수취 시 소비자 요청이 없어도 <strong>무조건 발행</strong>해야 합니다.<br>
+                        (위반 시 가산세 20%)
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Interior VAT Assetization -->
+        <section id="section-interior" class="scroll-mt-20 space-y-6">
+            <h3 class="text-xl md:text-2xl font-bold text-brand-900 flex items-center">
+                <span class="text-accent mr-2">🔨</span> 인테리어와 매입세액
+            </h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-white p-6 md:p-8 rounded-3xl border border-brand-200 shadow-sm">
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-[10px] md:text-xs font-bold text-brand-400 mb-2 uppercase tracking-wider">공사비 입력 (VAT 별도)</label>
+                        <div class="flex items-center space-x-2 border-b-2 border-brand-100 pb-2 focus-within:border-accent transition-colors">
+                            <input type="number" id="costInput" value="50000000" class="text-3xl md:text-4xl font-black text-accent w-full bg-transparent outline-none">
+                            <span class="font-bold text-brand-300 text-xl">원</span>
                         </div>
+                    </div>
+                    <div class="p-4 bg-brand-50 rounded-xl text-xs md:text-sm text-brand-600 leading-relaxed border border-brand-100">
+                        <strong>💡 면세사업자 절세 팁</strong><br>
+                        환급받지 못한 부가세(10%)는 사라지는 돈이 아닙니다. <strong>자산(시설장치) 취득원가</strong>에 포함시켜 5년 동안 감가상각비로 처리하면 소득세를 줄일 수 있습니다.
                     </div>
                 </div>
                 <div class="chart-container">
@@ -214,112 +299,143 @@
             </div>
         </section>
 
-        <section id="section-calendar" class="scroll-mt-12 space-y-8">
-            <h3 class="text-2xl font-black text-brand-900 border-l-4 border-accent pl-6">📅 연간 주요 세무 일정</h3>
-            <div class="flex space-x-6 overflow-x-auto no-scrollbar pb-6 px-2">
-                <div class="min-w-[280px] bg-white p-6 rounded-2xl border border-brand-200 shadow-sm relative pt-12">
-                    <div class="absolute top-0 left-6 -translate-y-1/2 bg-accent text-white px-4 py-2 rounded-xl text-xs font-black">2월 10일</div>
-                    <h4 class="font-bold text-brand-800 mb-2">사업자 현황신고</h4>
-                    <p class="text-xs text-brand-500 leading-relaxed">지난 1년 매출액을 세무서에 보고합니다. 종합소득세의 기초 자료가 됩니다.</p>
+        <!-- 5. Annual Tax Timeline -->
+        <section id="section-calendar" class="scroll-mt-20 space-y-6">
+            <h3 class="text-xl md:text-2xl font-bold text-brand-900 flex items-center">
+                <span class="text-accent mr-2">📅</span> 연간 주요 세무 일정
+            </h3>
+            <!-- Mobile Horizontal Scroll / Desktop Grid -->
+            <div class="flex overflow-x-auto md:overflow-visible no-scrollbar space-x-4 md:space-x-0 md:grid md:grid-cols-4 md:gap-6 pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0">
+                <div class="min-w-[160px] md:min-w-0 bg-white p-5 rounded-2xl border border-brand-100 shadow-sm border-t-4 border-t-accent desktop-card-hover">
+                    <p class="text-xs font-bold text-accent">매월 10일</p>
+                    <p class="font-bold text-brand-800 text-sm mt-2">원천세 신고</p>
+                    <p class="text-[10px] text-brand-400 mt-2">직원/코치 급여 세금 납부</p>
                 </div>
-                <div class="min-w-[280px] bg-white p-6 rounded-2xl border border-brand-200 shadow-sm relative pt-12">
-                    <div class="absolute top-0 left-6 -translate-y-1/2 bg-brand-800 text-white px-4 py-2 rounded-xl text-xs font-black">매달 10일</div>
-                    <h4 class="font-bold text-brand-800 mb-2">원천세 신고·납부</h4>
-                    <p class="text-xs text-brand-500 leading-relaxed">코치(3.3%)나 직원의 월급에서 뗀 세금을 나라에 내는 날입니다.</p>
+                <div class="min-w-[160px] md:min-w-0 bg-white p-5 rounded-2xl border border-brand-100 shadow-sm border-t-4 border-t-brand-400 desktop-card-hover">
+                    <p class="text-xs font-bold text-brand-400">2월 10일</p>
+                    <p class="font-bold text-brand-800 text-sm mt-2">사업자 현황신고</p>
+                    <p class="text-[10px] text-brand-400 mt-2">전년도 매출액 확정 신고</p>
                 </div>
-                <div class="min-w-[280px] bg-white p-6 rounded-2xl border border-brand-200 shadow-sm relative pt-12">
-                    <div class="absolute top-0 left-6 -translate-y-1/2 bg-accent text-white px-4 py-2 rounded-xl text-xs font-black">3월 10일</div>
-                    <h4 class="font-bold text-brand-800 mb-2">지급명세서 제출</h4>
-                    <p class="text-xs text-brand-500 leading-relaxed">누구에게 얼마를 지급했는지 상세 내역을 제출하는 마감일입니다.</p>
+                <div class="min-w-[160px] md:min-w-0 bg-white p-5 rounded-2xl border border-brand-100 shadow-sm border-t-4 border-t-brand-400 desktop-card-hover">
+                    <p class="text-xs font-bold text-brand-400">3월 10일</p>
+                    <p class="font-bold text-brand-800 text-sm mt-2">지급명세서 제출</p>
+                    <p class="text-[10px] text-brand-400 mt-2">인건비 지출 상세 내역</p>
                 </div>
-                <div class="min-w-[280px] bg-white p-6 rounded-2xl border border-brand-200 shadow-sm relative pt-12">
-                    <div class="absolute top-0 left-6 -translate-y-1/2 bg-accent text-white px-4 py-2 rounded-xl text-xs font-black">5월 한 달</div>
-                    <h4 class="font-bold text-brand-800 mb-2">종합소득세 신고</h4>
-                    <p class="text-xs text-brand-500 leading-relaxed">전체 수입에서 경비를 뺀 최종 소득에 대해 세금을 확정하고 납부합니다.</p>
+                <div class="min-w-[160px] md:min-w-0 bg-white p-5 rounded-2xl border border-brand-100 shadow-sm border-t-4 border-t-accent desktop-card-hover">
+                    <p class="text-xs font-bold text-accent">5월 한달</p>
+                    <p class="font-bold text-brand-800 text-sm mt-2">종합소득세 신고</p>
+                    <p class="text-[10px] text-brand-400 mt-2">최종 세금 확정 및 납부</p>
                 </div>
             </div>
         </section>
 
-        <section id="section-structure" class="scroll-mt-12 space-y-8">
-            <h3 class="text-2xl font-black text-brand-900 border-l-4 border-accent pl-6">💰 종합소득세 계산 구조</h3>
-            <div class="bg-brand-900 text-white p-10 rounded-3xl shadow-xl">
-                <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-center mb-10 text-center">
-                    <div>
-                        <p class="text-brand-300 text-[10px] font-bold uppercase mb-1">매출</p>
-                        <p class="text-xl font-black">총수입</p>
+        <!-- 6. Income Tax Calculation Structure -->
+        <section id="section-structure" class="scroll-mt-20 space-y-6">
+            <h3 class="text-xl md:text-2xl font-bold text-brand-900 flex items-center">
+                <span class="text-accent mr-2">💰</span> 소득세 계산 구조
+            </h3>
+            <div class="bg-brand-900 text-white p-6 md:p-10 rounded-[2rem] space-y-8 shadow-xl">
+                <!-- Waterfall Visualization -->
+                <div class="flex flex-col md:flex-row justify-between items-center text-center gap-4 md:gap-0">
+                    <div class="flex-1">
+                        <p class="text-[10px] md:text-xs text-brand-400 font-bold uppercase mb-1">Total Revenue</p>
+                        <p class="text-sm md:text-xl font-bold">총수입금액</p>
                     </div>
-                    <div class="text-brand-600 text-2xl">－</div>
-                    <div>
-                        <p class="text-brand-300 text-[10px] font-bold uppercase mb-1">경비</p>
-                        <p class="text-xl font-black">필요경비</p>
+                    <div class="text-brand-700 text-lg md:text-2xl">－</div>
+                    <div class="flex-1">
+                        <p class="text-[10px] md:text-xs text-brand-400 font-bold uppercase mb-1">Expenses</p>
+                        <p class="text-sm md:text-xl font-bold">필요경비</p>
                     </div>
-                    <div class="text-brand-600 text-2xl">＝</div>
-                    <div class="bg-accent px-6 py-4 rounded-2xl">
-                        <p class="text-white/70 text-[10px] font-bold uppercase mb-1">기본</p>
-                        <p class="text-xl font-black">소득금액</p>
+                    <div class="text-brand-700 text-lg md:text-2xl">＝</div>
+                    <div class="flex-1 bg-accent/20 border border-accent/30 rounded-xl py-2 px-4">
+                        <p class="text-accent text-[10px] md:text-xs font-bold uppercase mb-1">Tax Base</p>
+                        <p class="text-sm md:text-xl font-bold">소득금액</p>
                     </div>
                 </div>
-                <div class="border-t border-white/10 pt-10 space-y-6">
-                    <div class="flex flex-col md:flex-row justify-between gap-6">
-                        <div class="flex-1 space-y-4">
-                            <p class="text-sm font-bold flex items-center">
-                                <span class="w-1 h-1 bg-accent mr-2"></span> 소득공제 및 세율 적용
-                            </p>
-                            <p class="text-xs text-brand-300 leading-relaxed">
-                                소득금액에서 인적공제 등을 차감하여 과세표준을 구하고, 6%~45%의 누진세율을 적용하여 산출세액을 계산합니다.
-                            </p>
-                        </div>
-                        <div class="flex-1 space-y-4">
-                            <p class="text-sm font-bold flex items-center">
-                                <span class="w-1 h-1 bg-accent mr-2"></span> 세액공제 및 감면
-                            </p>
-                            <p class="text-xs text-brand-300 leading-relaxed">
-                                계산된 세금에서 창업감면 등을 직접 차감하여 최종 납부할 결정세액을 산출합니다.
-                            </p>
-                        </div>
+                
+                <div class="flex flex-col md:flex-row gap-8 items-center border-t border-white/10 pt-8">
+                    <div class="w-full md:w-1/2 space-y-4 text-center md:text-left">
+                        <p class="text-sm md:text-base font-bold text-brand-100">최종 세금 산출 과정</p>
+                        <ol class="text-xs md:text-sm text-brand-300 space-y-2 list-decimal list-inside">
+                            <li>소득금액에서 <strong>소득공제</strong>(부양가족 등) 차감</li>
+                            <li>과세표준에 <strong>세율</strong>(6~45%) 적용</li>
+                            <li>산출세액에서 <strong>세액공제</strong>(창업감면 등) 차감</li>
+                            <li><strong>결정세액</strong> 납부</li>
+                        </ol>
                     </div>
-                    <div class="chart-container h-48">
+                    <div class="w-full md:w-1/2 chart-container h-48 md:h-56">
                         <canvas id="structureChart"></canvas>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="section-benefit" class="scroll-mt-12 space-y-8">
-            <h3 class="text-2xl font-black text-brand-900 border-l-4 border-accent pl-6">🎁 세액공제 및 감면 혜택</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white p-8 rounded-3xl border border-brand-200">
-                    <p class="text-accent font-black mb-4">청년창업 세액감면 (제6조)</p>
-                    <p class="text-sm text-brand-600 leading-relaxed">
-                        만 15세~34세 청년이 성남시(과밀억제권역)에서 창업한 경우, 5년간 소득세의 <strong>50%</strong>를 감면합니다.
+        <!-- 7. Special Tax Credits -->
+        <section id="section-benefit" class="scroll-mt-20 space-y-6 pb-16 md:pb-24">
+            <h3 class="text-xl md:text-2xl font-bold text-brand-900 flex items-center">
+                <span class="text-accent mr-2">🎁</span> 세액감면 혜택 (조특법)
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-brand-200 desktop-card-hover">
+                    <div class="text-3xl mb-3">🌱</div>
+                    <p class="font-bold text-brand-800 text-sm md:text-base mb-2">청년창업 세액감면 (제6조)</p>
+                    <p class="text-xs text-brand-500 leading-relaxed">
+                        성남시(과밀억제권역)에서 창업한 청년(15~34세)은 5년간 소득세의 <strong>50%</strong>를 감면받습니다.
                     </p>
                 </div>
-                <div class="bg-white p-8 rounded-3xl border border-brand-200">
-                    <p class="text-accent font-black mb-4">중소기업 특별세액감면 (제7조)</p>
-                    <p class="text-sm text-brand-600 leading-relaxed">
-                        소규모 체육관 운영 시 지역과 규모에 따라 소득세의 10%~20% 수준을 추가로 감면받을 수 있습니다.
+                <div class="bg-white p-6 rounded-2xl border border-brand-200 desktop-card-hover">
+                    <div class="text-3xl mb-3">🏭</div>
+                    <p class="font-bold text-brand-800 text-sm md:text-base mb-2">중소기업 특별세액감면</p>
+                    <p class="text-xs text-brand-500 leading-relaxed">
+                        소규모 체육관 운영 시 업종과 규모에 따라 산출세액의 <strong>10~20%</strong>를 감면받을 수 있습니다.
                     </p>
                 </div>
-                <div class="bg-white p-8 rounded-3xl border border-brand-200 md:col-span-2">
-                    <p class="text-accent font-black mb-4">고용증대 세액공제</p>
-                    <p class="text-sm text-brand-600 leading-relaxed mb-4">
-                        상시 근로자 수가 전년 대비 증가한 경우 증가 인원당 수백만원에서 천만원대까지 세금을 직접 공제합니다. (사후관리 필요)
+                <div class="bg-white p-6 rounded-2xl border border-brand-200 desktop-card-hover">
+                    <div class="text-3xl mb-3">👥</div>
+                    <p class="font-bold text-brand-800 text-sm md:text-base mb-2">고용증대 세액공제</p>
+                    <p class="text-xs text-brand-500 leading-relaxed">
+                        직원을 채용하여 인원이 증가하면 1인당 수백만원에서 천만원대까지 세금을 직접 깎아줍니다.
                     </p>
                 </div>
             </div>
         </section>
 
-        <footer class="pt-12 border-t border-brand-100 text-center text-brand-400 text-[10px] pb-12">
-            <p>© 2026 Boxing Gym Founders Master Guide. Clean Document Logic Active.</p>
+        <!-- Footer -->
+        <footer class="text-center text-xs text-brand-300 pb-12 safe-area-bottom">
+            <p>※ 본 가이드는 참고용이며 법적 책임이 없습니다.</p>
+            <p class="mt-2 font-bold opacity-50">Boxing Gym Tax Assistant v4.0 (Responsive)</p>
         </footer>
 
     </main>
 
+    <!-- Logic -->
     <script>
-        const apiKey = ""; 
+        const apiKey = "AIzaSyCFwAboQMlGAQhFzGEPnOPBBxUcGAlD7Fg"; 
         const model = "gemini-2.5-flash-preview-09-2025";
 
-        // Clean Text Function (No #, *, -)
+        // Menu Toggle Logic (Mobile)
+        const menuBtn = document.getElementById('menu-toggle');
+        const menuClose = document.getElementById('menu-close');
+        const menu = document.getElementById('mobile-menu');
+
+        function toggleMenu(show) {
+            if (show) {
+                menu.classList.remove('hidden');
+                setTimeout(() => menu.classList.remove('opacity-0'), 10);
+            } else {
+                menu.classList.add('opacity-0');
+                setTimeout(() => menu.classList.add('hidden'), 300);
+            }
+        }
+
+        menuBtn.onclick = () => toggleMenu(true);
+        menuClose.onclick = () => toggleMenu(false);
+        menu.onclick = (e) => { if(e.target === menu) toggleMenu(false); };
+        document.querySelectorAll('#mobile-menu a').forEach(a => {
+            a.onclick = () => toggleMenu(false);
+        });
+
+        // Clean Text Function
         function cleanText(text) {
             return text
                 .replace(/^#+\s/gm, '')         
@@ -331,16 +447,10 @@
                 .trim();
         }
 
+        // AI Generation Logic
         async function fetchGemini(promptText) {
             const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-            const finalPrompt = `
-                ${promptText}
-                규칙:
-                1. 절대로 #, *, -, -- 특수기호를 사용하지 마세요.
-                2. 제목은 단순히 텍스트와 줄바꿈으로만 구분하세요.
-                3. 목록은 숫자(1., 2.)를 사용하세요.
-                4. 문서는 아주 깔끔한 평문(Plain Text) 형태여야 합니다.
-            `;
+            const finalPrompt = `${promptText}\n규칙: 마크다운 기호 없이 깔끔한 평문과 숫자로만 작성.`;
 
             const response = await fetch(url, {
                 method: 'POST',
@@ -353,7 +463,6 @@
             return cleanText(data.candidates[0].content.parts[0].text);
         }
 
-        // Copy Feature
         function copyToClipboard(elementId) {
             const text = document.getElementById(elementId).innerText;
             const el = document.createElement('textarea');
@@ -365,76 +474,69 @@
             
             const btn = event.target;
             const original = btn.innerText;
-            btn.innerText = "복사 완료!";
-            setTimeout(() => btn.innerText = original, 2000);
+            btn.innerText = "복사 완료";
+            btn.classList.replace('bg-brand-800', 'bg-accent');
+            setTimeout(() => {
+                btn.innerText = original;
+                btn.classList.replace('bg-accent', 'bg-brand-800');
+            }, 2000);
         }
 
-        // Fold Feature
         function foldArea(elementId) {
             document.getElementById(elementId).classList.add('hidden');
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            
-            // Freelancer Generator
-            document.getElementById('btnFreeGen').addEventListener('click', async () => {
-                const info = document.getElementById('freeRole').value;
-                if (!info) return;
+            const setupGen = (btnId, inputId, resultAreaId, outputId, promptBase) => {
+                const btn = document.getElementById(btnId);
+                if(btn) {
+                    btn.addEventListener('click', async () => {
+                        const info = document.getElementById(inputId).value;
+                        if (!info) return;
 
-                const loading = document.getElementById('loading');
-                const resultArea = document.getElementById('freeResultArea');
-                const output = document.getElementById('freeOutput');
+                        const loading = document.getElementById('loading');
+                        const resultArea = document.getElementById(resultAreaId);
+                        const output = document.getElementById(outputId);
 
-                loading.classList.remove('hidden');
-                resultArea.classList.add('hidden');
+                        loading.classList.remove('hidden');
+                        resultArea.classList.add('hidden');
 
-                try {
-                    const res = await fetchGemini(`권투체육관 코치 ${info}를 위한 프리랜서 위촉계약서 문구를 작성해줘. 3.3% 원천징수와 독립적 업무 지위 조항을 포함해.`);
-                    output.innerText = res;
-                    resultArea.classList.remove('hidden');
-                } catch (e) {
-                    output.innerText = "생성에 실패했습니다.";
-                } finally {
-                    loading.classList.add('hidden');
+                        try {
+                            const res = await fetchGemini(`${promptBase} ${info} 조건으로 작성해줘.`);
+                            output.innerText = res;
+                            resultArea.classList.remove('hidden');
+                            if(window.innerWidth < 768) {
+                                resultArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        } catch (e) {
+                            output.innerText = "오류가 발생했습니다.";
+                        } finally {
+                            loading.classList.add('hidden');
+                        }
+                    });
                 }
-            });
+            };
 
-            // Labor Generator
-            document.getElementById('btnLaborGen').addEventListener('click', async () => {
-                const info = document.getElementById('laborInfo').value;
-                if (!info) return;
+            setupGen('btnFreeGen', 'freeRole', 'freeResultArea', 'freeOutput', '권투체육관 코치 프리랜서 위촉계약서 문구:');
+            setupGen('btnLaborGen', 'laborInfo', 'laborResultArea', 'laborOutput', '권투체육관 직원 표준 근로계약서 초안:');
 
-                const loading = document.getElementById('loading');
-                const resultArea = document.getElementById('laborResultArea');
-                const output = document.getElementById('laborOutput');
-
-                loading.classList.remove('hidden');
-                resultArea.classList.add('hidden');
-
-                try {
-                    const res = await fetchGemini(`권투체육관 근로자 ${info}를 위한 표준 근로계약서 초안을 작성해줘. 근로기준법 준수 및 주휴수당 내용 포함.`);
-                    output.innerText = res;
-                    resultArea.classList.remove('hidden');
-                } catch (e) {
-                    output.innerText = "생성에 실패했습니다.";
-                } finally {
-                    loading.classList.add('hidden');
-                }
-            });
-
-            // Chart Logic
+            // Responsive Charts
             const costCtx = document.getElementById('costChart').getContext('2d');
             const costChart = new Chart(costCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['순수 공사비', '불공제 부가세 (자산화)'],
+                    labels: ['순수 공사비', '부가세(자산가산)'],
                     datasets: [{
                         data: [50000000, 5000000],
                         backgroundColor: ['#ebe6e0', '#d97706'],
                         borderWidth: 0
                     }]
                 },
-                options: { responsive: true, maintainAspectRatio: false }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: window.innerWidth < 768 ? 10 : 12 } } } } 
+                }
             });
 
             document.getElementById('costInput').addEventListener('input', (e) => {
@@ -447,18 +549,24 @@
             new Chart(structureCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['매출', '경비', '소득', '감면액'],
+                    labels: ['수입', '비용', '소득'],
                     datasets: [{
-                        data: [100, 60, 40, 20],
-                        backgroundColor: ['#70594c', '#a3846f', '#d97706', '#fbbf24'],
-                        borderRadius: 8
+                        data: [100, 65, 35],
+                        backgroundColor: ['#70594c', '#a3846f', '#d97706'],
+                        borderRadius: window.innerWidth < 768 ? 4 : 8
                     }]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: false } },
+                    scales: { 
+                        y: { display: false },
+                        x: { grid: { display: false }, ticks: { font: { size: window.innerWidth < 768 ? 10 : 12 }, color: '#fff' } } 
+                    } 
+                }
             });
         });
     </script>
 </body>
 </html>
-
-```
