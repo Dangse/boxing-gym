@@ -346,16 +346,33 @@
 
     <!-- Logic -->
     <script>
-        // =========================================================
-        // [중요] 이곳은 절대 수정하지 마세요. (자동으로 API 키를 처리합니다)
-        // =========================================================
-        let apiKey = localStorage.getItem("gym_gemini_api_key");
+        const deployKey = "MY_GOOGLE_API_KEY"; // 깃허브 배포용 변수
+        let apiKey = "";
+
+        // 로직: 배포된 키가 있으면 그걸 쓰고, 없으면 저장된 걸 찾고, 그래도 없으면 물어봄
+        if (deployKey !== "MY_GOOGLE_API_KEY") {
+            apiKey = deployKey; // 배포 성공! 깃허브 키 사용
+        } else {
+            // 로컬 테스트용: 저장된 키 확인
+            const savedKey = localStorage.getItem("gym_gemini_api_key");
+            if (savedKey) {
+                apiKey = savedKey;
+            } else {
+                // 키가 없으면 입력 받기
+                const input = prompt("Google Gemini API 키를 입력해주세요.\n(입력한 키는 브라우저에만 저장됩니다.)");
+                if (input && input.trim().length > 10) {
+                    apiKey = input.trim();
+                    localStorage.setItem("gym_gemini_api_key", apiKey);
+                    alert("API 키가 저장되었습니다. 이제 AI 기능을 사용할 수 있습니다.");
+                } else {
+                    alert("API 키가 없으면 AI 기능이 작동하지 않습니다.");
+                }
+            }
+        }
+
         const model = "gemini-2.5-flash-preview-09-2025";
 
-        // Menu Logic
-        const menuBtn = document.getElementById('menu-toggle');
-        const menuClose = document.getElementById('menu-close');
-        const menu = document.getElementById('mobile-menu');
+        // ... (이하 toggleMenu 함수부터는 그대로 두시면 됩니다) ...
 
         function toggleMenu(show) {
             if (show) {
