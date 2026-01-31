@@ -488,35 +488,49 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+        // 기존 코드의 setupGen 함수를 이걸로 덮어쓰세요
             const setupGen = (btnId, inputId, resultAreaId, outputId, promptBase) => {
                 const btn = document.getElementById(btnId);
                 if(btn) {
                     btn.addEventListener('click', async () => {
                         const info = document.getElementById(inputId).value;
-                        if (!info) return;
+                        if (!info) {
+                            alert("내용을 입력해주세요."); // 입력값 없을 때 알림 추가
+                            return;
+                        }
 
                         const loading = document.getElementById('loading');
                         const resultArea = document.getElementById(resultAreaId);
                         const output = document.getElementById(outputId);
 
+                        // 1. 로딩 켜고, 결과창 일단 숨기기
                         loading.classList.remove('hidden');
                         resultArea.classList.add('hidden');
 
                         try {
+                            // 2. AI 요청
                             const res = await fetchGemini(`${promptBase} ${info} 조건으로 작성해줘.`);
+                            
+                            // 3. 성공 시 결과 보여주기
                             output.innerText = res;
                             resultArea.classList.remove('hidden');
+                            
+                            // 모바일에서 스크롤 이동
                             if(window.innerWidth < 768) {
                                 resultArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
                             }
                         } catch (e) {
-                            output.innerText = "오류가 발생했습니다.";
+                            // 4. [수정된 부분] 실패 시에도 결과창을 열어서 에러 메시지를 보여줘야 함!
+                            console.error(e);
+                            output.innerText = "죄송합니다. 오류가 발생했습니다.\nAPI 키를 확인하거나 잠시 후 다시 시도해주세요.";
+                            resultArea.classList.remove('hidden'); // ★ 이 줄이 빠져있어서 안 보였던 겁니다!
                         } finally {
+                            // 5. 로딩 끄기
                             loading.classList.add('hidden');
                         }
                     });
                 }
-            };
+            };    
 
             setupGen('btnFreeGen', 'freeRole', 'freeResultArea', 'freeOutput', '권투체육관 코치 프리랜서 위촉계약서 문구:');
             setupGen('btnLaborGen', 'laborInfo', 'laborResultArea', 'laborOutput', '권투체육관 직원 표준 근로계약서 초안:');
