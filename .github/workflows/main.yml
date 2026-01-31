@@ -1,0 +1,45 @@
+name: Deploy Boxing Gym App
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Inject API Key into index.html
+        run: |
+          sed -i 's/MY_GOOGLE_API_KEY/${{ secrets.GEMINI_API_KEY }}/g' index.html
+          
+      # 만약 payroll.html 에도 AI 기능이 있다면 아래 주석(#)을 지우고 사용하세요
+      # - name: Inject API Key into payroll.html
+      #   run: sed -i 's/MY_GOOGLE_API_KEY/${{ secrets.GEMINI_API_KEY }}/g' payroll.html
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
