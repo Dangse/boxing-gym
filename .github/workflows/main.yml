@@ -2,7 +2,7 @@ name: Deploy Boxing Gym App
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main"] # 브랜치 이름이 master라면 여기를 master로 변경해야 함
   workflow_dispatch:
 
 permissions:
@@ -21,21 +21,34 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      - name: Inject API Key into index.html
+      # [핵심] 키 교체 작업
+      - name: Inject API Key
         run: |
-          sed -i 's/MY_GOOGLE_API_KEY/${{ secrets.GEMINI_API_KEY }}/g' index.html
-          
-      # 만약 payroll.html 에도 AI 기능이 있다면 아래 주석(#)을 지우고 사용하세요
-      # - name: Inject API Key into payroll.html
-      #   run: sed -i 's/MY_GOOGLE_API_KEY/${{ secrets.GEMINI_API_KEY }}/g' payroll.html
+          # 1. index.html 파일이 있는지 확인
+          if [ ! -f index.html ]; then
+            echo "Error: index.html not found!"
+            exit 1
+          fi
+
+          # 2. 강력한 치환 명령 (구분자를 |로 변경하여 에러 방지)
+          sed -i 's|MY_GOOGLE_API_KEY|${{ secrets.GEMINI_API_KEY }}|g' index.html
+
+          # 3. 제대로 바뀌었는지 로그로 확인 (키 값은 ***로 가려져서 나옴)
+          echo "Verification: Checking if placeholder exists..."
+          if grep -q "MY_GOOGLE_API_KEY" index.html; then
+            echo "FAIL: Placeholder still exists!"
+            exit 1
+          else
+            echo "SUCCESS: Placeholder replaced."
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload artifact
+      - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
